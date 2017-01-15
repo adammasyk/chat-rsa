@@ -9,7 +9,7 @@ import java.security.SecureRandom;
 public class RSA {
     private static int KEY_LENGTH = 512;
     private static SecureRandom secureRandom = new SecureRandom();
-    private static BigInteger e = new BigInteger("65537");
+    private static BigInteger e = new BigInteger("3");
     private static BigInteger n;
     private static BigInteger d;
     private static BigInteger p = BigInteger.probablePrime(KEY_LENGTH,secureRandom); // dwie duze liczby pierwsze
@@ -25,7 +25,7 @@ public class RSA {
         n = p.multiply(q); // obliczenie n, drugiej liczby w kluczu tajnym i publicznym
         BigInteger fi = (p.subtract(BigInteger.ONE)).multiply(q
                 .subtract(BigInteger.ONE)); // obliczenie fi = (p-1) x (q-1)
-        while (fi.gcd(e).intValue() > 1 && e.compareTo(BigInteger.ONE) == 1 && e.compareTo(n) == -1) {
+        while (fi.gcd(e).intValue() != 1 && e.compareTo(BigInteger.ONE) == 1 && e.compareTo(n) == -1) {
             e = e.add(new BigInteger("1"));
             /*
             Znalezienie dobrej wartosci liczby e czyli najwiekszego wspolnego dzielnika e oraz fi, dodatkowo

@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    private boolean isServer = false;
+    private boolean isServer = true;
 
     private TextArea messages = new TextArea();
     private TextArea encryptedMessage = new TextArea();
