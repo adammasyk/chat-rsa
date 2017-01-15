@@ -38,16 +38,16 @@ public class RSA {
         createKey();
     }
 
-    public   String decrypt(String messageToDecrypt) {
-        return new String((new BigInteger(messageToDecrypt)).modPow(d, n).toByteArray()); // szyfrowanie kluczem prywatnym
+    public   String encrypt(String messageToEncrypt) {
+        return new String((new BigInteger(messageToEncrypt)).modPow(d, n).toByteArray()); // szyfrowanie kluczem prywatnym
     }
 
     public   String getPublicKey() {
         return "e:" + e.toString() + "n:" + n.toString();
     }
 
-    public String encryptMessageToSend(String messageToSend) {
-        return (new BigInteger(messageToSend.getBytes())).modPow(forE, forN).toString(); // odszyfrowanie kluczem publicznym
+    public String decrypt(String messageToDecrypt) {
+        return (new BigInteger(messageToDecrypt.getBytes())).modPow(forE, forN).toString(); // odszyfrowanie kluczem publicznym
     }
 
 }
