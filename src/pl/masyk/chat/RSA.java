@@ -9,11 +9,11 @@ import java.security.SecureRandom;
 public class RSA {
     private static int KEY_LENGTH = 512;
     private static SecureRandom secureRandom = new SecureRandom();
-    private static BigInteger e;
+    private static BigInteger e = new BigInteger("65537");
     private static BigInteger n;
     private static BigInteger d;
-    private static BigInteger p = new BigInteger(KEY_LENGTH, 100, secureRandom);
-    private static BigInteger q = new BigInteger(KEY_LENGTH, 100, secureRandom);
+    private static BigInteger p = BigInteger.probablePrime(KEY_LENGTH,secureRandom); // dwie duze liczby pierwsze
+    private static BigInteger q = BigInteger.probablePrime(KEY_LENGTH,secureRandom); // dwie duze liczby pierwsze
     private BigInteger forE;
     private BigInteger forN;
 
@@ -22,21 +22,24 @@ public class RSA {
         forN = new BigInteger(foreginKey.substring(foreginKey.indexOf("n:")+2));
     }
     private static void createKey () {
-        n = p.multiply(q);
-        BigInteger m = (p.subtract(BigInteger.ONE)).multiply(q
-                .subtract(BigInteger.ONE));
-        e = new BigInteger("65537");
-        while (m.gcd(e).intValue() > 1) {
-            e = e.add(new BigInteger("2"));
+        n = p.multiply(q); // obliczenie n, drugiej liczby w kluczu tajnym i publicznym
+        BigInteger fi = (p.subtract(BigInteger.ONE)).multiply(q
+                .subtract(BigInteger.ONE)); // obliczenie fi = (p-1) x (q-1)
+        while (fi.gcd(e).intValue() > 1 && e.compareTo(BigInteger.ONE) == 1 && e.compareTo(n) == -1) {
+            e = e.add(new BigInteger("1"));
+            /*
+            Znalezienie dobrej wartosci liczby e czyli najwiekszego wspolnego dzielnika e oraz fi, dodatkowo
+             liczba ta musi spelnic warunek  1 < e < n
+             */
         }
-        d = e.modInverse(m);
+        d = e.modInverse(fi); // obliczenie odwrotnej modulo fi
     }
     public RSA() {
         createKey();
     }
 
     public   String decrypt(String messageToDecrypt) {
-        return new String((new BigInteger(messageToDecrypt)).modPow(d, n).toByteArray());
+        return new String((new BigInteger(messageToDecrypt)).modPow(d, n).toByteArray()); // szyfrowanie kluczem prywatnym
     }
 
     public   String getPublicKey() {
@@ -44,7 +47,7 @@ public class RSA {
     }
 
     public String encryptMessageToSend(String messageToSend) {
-        return (new BigInteger(messageToSend.getBytes())).modPow(forE, forN).toString();
+        return (new BigInteger(messageToSend.getBytes())).modPow(forE, forN).toString(); // odszyfrowanie kluczem publicznym
     }
 
 }
