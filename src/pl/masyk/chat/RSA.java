@@ -28,7 +28,7 @@ public class RSA {
         while (fi.gcd(e).intValue() != 1 && e.compareTo(BigInteger.ONE) == 1 && e.compareTo(n) == -1) {
             e = e.add(new BigInteger("1"));
             /*
-            Znalezienie dobrej wartosci liczby e czyli najwiekszego wspolnego dzielnika e oraz fi, dodatkowo
+            Znalezienie dobrej wartosci liczby e czyli takie dla ktorej NWD e oraz fi jest rowny 1, dodatkowo
              liczba ta musi spelnic warunek  1 < e < n
              */
         }
