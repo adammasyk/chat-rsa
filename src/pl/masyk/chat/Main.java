@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    private boolean isServer = true;
+    private boolean isServer = false;
 
     private TextArea messages = new TextArea();
     private TextArea encryptedMessage = new TextArea();
@@ -78,7 +78,7 @@ public class Main extends Application {
         return new Server(55555, data -> {
             Platform.runLater(() -> {
                 if (keySended) {
-                    messages.appendText(connection.rsaKey.decryptMessage(data.toString()) + "\n");
+                    messages.appendText(connection.rsaKey.decryptMessage(data) + "\n");
                     encryptedMessage.appendText(data + "\n");
                 }
             });
@@ -89,7 +89,7 @@ public class Main extends Application {
         return new Client("127.0.0.1", 55555, data -> {
             Platform.runLater(() -> {
                 if (keySended) {
-                messages.appendText(connection.rsaKey.decryptMessage(data.toString()) + "\n");
+                messages.appendText(connection.rsaKey.decryptMessage(data) + "\n");
                 encryptedMessage.appendText(data + "\n");
                 }
             });
