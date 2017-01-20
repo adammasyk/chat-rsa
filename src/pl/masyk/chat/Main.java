@@ -34,7 +34,7 @@ public class Main extends Application {
             input.clear();
             if (keySended) {
                 messages.appendText(message + "\n");
-                encryptedMessage.appendText(connection.rsaKey.decrypt(message) + "\n");
+                encryptedMessage.appendText(connection.rsaKey.encryptMessage(message) + "\n");
             }
             try {
                 if (!keySended && (message.toLowerCase().contains("y"))) {
@@ -45,7 +45,7 @@ public class Main extends Application {
                     Platform.exit();
                     System.exit(0);
                 } else {
-                    connection.send(connection.rsaKey.decrypt(message));
+                    connection.send(connection.rsaKey.encryptMessage(message));
                 }
             }
             catch (Exception e) {
@@ -78,7 +78,7 @@ public class Main extends Application {
         return new Server(55555, data -> {
             Platform.runLater(() -> {
                 if (keySended) {
-                    messages.appendText(connection.rsaKey.encrypt(data.toString()) + "\n");
+                    messages.appendText(connection.rsaKey.decryptMessage(data.toString()) + "\n");
                     encryptedMessage.appendText(data + "\n");
                 }
             });
@@ -89,7 +89,7 @@ public class Main extends Application {
         return new Client("127.0.0.1", 55555, data -> {
             Platform.runLater(() -> {
                 if (keySended) {
-                messages.appendText(connection.rsaKey.encrypt(data.toString()) + "\n");
+                messages.appendText(connection.rsaKey.decryptMessage(data.toString()) + "\n");
                 encryptedMessage.appendText(data + "\n");
                 }
             });
